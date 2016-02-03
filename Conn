@@ -1,0 +1,46 @@
+
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+import com.fazecast.jSerialComm.*;
+public class Conn {
+
+static	PrintWriter out;
+static 	SerialPort[] ports;
+static 	SerialPort port;
+static 	Scanner in;
+static Thread listen;
+	
+public static SerialPort[] getPorts(){
+	ports = SerialPort.getCommPorts();
+	return ports;
+}
+
+public static void sendMsg(String s){
+	out.println(s);
+	out.flush();
+}
+
+public static void connect(int i){
+	port = ports[i];
+	port.openPort();
+	port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
+	out = new PrintWriter(port.getOutputStream());
+	in = new Scanner(port.getInputStream());
+}
+
+public static void disconnect(){
+	port.closePort();
+	listen.stop();
+
+}
+
+public static void listen(){// handle the input from the Arduino chip 
+	while(in.hasNextLine()){
+		System.out.println(in.nextLine());// just print it out to the console 
+	}
+}
+
+	
+ 
+}
