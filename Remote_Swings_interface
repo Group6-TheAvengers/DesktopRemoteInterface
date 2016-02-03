@@ -1,0 +1,116 @@
+
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import com.fazecast.jSerialComm.SerialPort;
+
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JTextPane;
+import java.awt.SystemColor;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class Remote_Interface extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField textField;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Remote_Interface frame = new Remote_Interface();
+					frame.setVisible(true);
+//					Conn.listen();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Remote_Interface() {
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 270, 268);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JComboBox<String> comboBox = new JComboBox<String> ();
+		comboBox.setBounds(20, 46, 214, 20);
+		for(int i=0; i<Conn.getPorts().length; i++){
+			comboBox.addItem(Conn.getPorts()[i].getSystemPortName());
+		}
+		contentPane.add(comboBox);
+		
+		textField = new JTextField();
+		textField.setBounds(20, 131, 214, 20);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		textField.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				Conn.sendMsg(e.getActionCommand());
+				textField.setText("");
+			}
+		});
+		
+		JButton btnNewButton = new JButton("Send");
+		btnNewButton.setBounds(20, 162, 89, 23);
+		contentPane.add(btnNewButton);
+		
+		JTextPane txtpnPleaseSelectA = new JTextPane();
+		txtpnPleaseSelectA.setBackground(SystemColor.control);
+		txtpnPleaseSelectA.setText("Please select a port to connect");
+		txtpnPleaseSelectA.setEditable(false);
+		txtpnPleaseSelectA.setBounds(10, 11, 214, 20);
+		contentPane.add(txtpnPleaseSelectA);
+		
+		btnNewButton.setEnabled(false);
+		textField.setEnabled(false);
+		
+		JButton btnNewButton_1 = new JButton("Connect");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Conn.connect(comboBox.getSelectedIndex());
+				btnNewButton.setEnabled(true);
+				textField.setEnabled(true);
+				Runnable run = new Runnable(){
+					public void run(){
+						Conn.listen();
+					}
+				};
+				Conn.listen = new Thread(run);
+				Conn.listen.start();
+			}
+		});
+		btnNewButton_1.setBounds(143, 77, 89, 23);
+		contentPane.add(btnNewButton_1);
+		
+		JButton btnD = new JButton("Disconnect");
+		btnD.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Conn.disconnect();
+				btnNewButton.setEnabled(false);
+				textField.setEnabled(false);
+			}
+		});
+		btnD.setBounds(20, 77, 89, 23);
+		contentPane.add(btnD);
+	}
+}
