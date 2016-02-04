@@ -65,10 +65,23 @@ public class Remote_Interface extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		textField.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				Conn.sendMsg(e.getActionCommand());
+	textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				switch (arg0.getKeyChar()){
+				case 'w': Conn.sendMsg('w');
+				          textField.setText("");
+				  break;
+				case 's': Conn.sendMsg('s');
 				textField.setText("");
+		         break;
+				case 'a': Conn.sendMsg('a');
+				textField.setText("");
+		         break;
+				case 'd': Conn.sendMsg('d');
+				textField.setText("");
+		         break;
+				}
 			}
 		});
 		
