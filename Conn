@@ -18,7 +18,7 @@ public static SerialPort[] getPorts(){
 	return ports;
 }
 
-public static void sendMsg(String s){
+public static void sendMsg(char s){
 	out.println(s);
 	out.flush();
 }
