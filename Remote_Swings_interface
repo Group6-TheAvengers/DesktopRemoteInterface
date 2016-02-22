@@ -18,6 +18,9 @@ import javax.swing.JTextPane;
 import java.awt.SystemColor;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Remote_Interface extends JFrame {
 
@@ -61,11 +64,7 @@ public class Remote_Interface extends JFrame {
 		contentPane.add(comboBox);
 		
 		textField = new JTextField();
-		textField.setBounds(20, 131, 214, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
-	textField.addKeyListener(new KeyAdapter() {
+		textField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 				switch (arg0.getKeyChar()){
@@ -81,9 +80,24 @@ public class Remote_Interface extends JFrame {
 				case 'd': Conn.sendMsg('d');
 				textField.setText("");
 		         break;
+				case 'q': Conn.sendMsg('q');
+				textField.setText("");
+		         break;
+				case 'e': Conn.sendMsg('e');
+				textField.setText("");
+		         break;
+				case 'f': Conn.sendMsg('f');
+				textField.setText("");
+		         break;
+		         
 				}
 			}
 		});
+		textField.setBounds(20, 131, 214, 20);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		
 		
 		JButton btnNewButton = new JButton("Send");
 		btnNewButton.setBounds(20, 162, 89, 23);
@@ -127,5 +141,6 @@ public class Remote_Interface extends JFrame {
 		});
 		btnD.setBounds(20, 77, 89, 23);
 		contentPane.add(btnD);
+		
 	}
 }
